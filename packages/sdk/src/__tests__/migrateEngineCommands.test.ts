@@ -7,6 +7,7 @@ import {
   dropDatabase,
 } from '../migrateEngineCommands'
 import { uriToCredentials, credentialsToUri } from '../convertCredentials'
+import { testIf } from '../../../../helpers/test/conditional'
 
 describe('execaCommand', () => {
   test('check if connection string is in error', async () => {
@@ -142,7 +143,7 @@ describe('createDatabase', () => {
     await expect(createDatabase(uriFromCredentials, __dirname)).resolves.toEqual(false)
   })
 
-  test('sqlserver - create database', async () => {
+  testIf(!process.env.TEST_SKIP_MSSQL)('sqlserver - create database', async () => {
     let uri = process.env.TEST_MSSQL_JDBC_URI!
     uri = uri.replace(/database=(.*?);/, 'database=can-create-a-db;')
     try {
@@ -151,7 +152,7 @@ describe('createDatabase', () => {
     await expect(createDatabase(uri, __dirname)).resolves.toEqual(true)
   })
 
-  test('sqlserver - database already exists', async () => {
+  testIf(!process.env.TEST_SKIP_MSSQL)('sqlserver - database already exists', async () => {
     const uri = process.env.TEST_MSSQL_JDBC_URI!
     await expect(createDatabase(uri, __dirname)).resolves.toEqual(false)
   })
