@@ -3,6 +3,9 @@
 if [ "$RUNNER_OS" = "Windows" ]; then
     echo "$PGBIN" >> $GITHUB_PATH
     echo "PQ_LIB_DIR=$PGROOT\lib" >> $GITHUB_ENV
+
+    pg_ctl start
+
     echo "TEST_POSTGRES_URI=postgres://postgres:root@localhost:5432/tests" >> $GITHUB_ENV
 fi
 
