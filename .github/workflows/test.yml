@@ -579,6 +579,11 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
+      - name: Prerequisites
+        shell: bash
+        run: |
+          echo "TEST_SKIP_MSSQL=true" >> $GITHUB_ENV
+
       - name: Setup PostgreSQL
         run: bash .github/workflows/setup-postgres.sh
 
