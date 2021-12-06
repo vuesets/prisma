@@ -4,10 +4,10 @@ import { getPlatform } from '@prisma/get-platform'
 import { engineEnvVarMap } from '@prisma/sdk'
 import makeDir from 'make-dir'
 import path from 'path'
-import { testIf } from '../../../../../helpers/test/conditional'
 import { consoleContext, Context } from '../__helpers__/context'
 
 const ctx = Context.new().add(consoleContext()).assemble()
+const testIf = (condition: boolean) => (condition ? test : test.skip)
 const useNodeAPI = getCliQueryEngineBinaryType() === BinaryType.libqueryEngine
 const version = '5a2e5869b69a983e279380ec68596b71beae9eff'
 

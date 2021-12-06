@@ -6,7 +6,6 @@ import { consoleContext, Context } from './__helpers__/context'
 import { setupMysql, tearDownMysql } from '../utils/setupMysql'
 import { setupMSSQL, tearDownMSSQL } from '../utils/setupMSSQL'
 import { SetupParams, setupPostgres, tearDownPostgres } from '../utils/setupPostgres'
-import { describeIf } from '../../../../helpers/test/conditional'
 
 const ctx = Context.new().add(consoleContext()).assemble()
 
@@ -1313,7 +1312,7 @@ describe('mysql', () => {
   })
 })
 
-describeIf(!process.env.TEST_SKIP_MSSQL)('SQL Server', () => {
+describe('SQL Server', () => {
   jest.setTimeout(20000)
 
   const connectionString = process.env.TEST_MSSQL_URI || 'mssql://SA:Pr1sm4_Pr1sm4@localhost:1433/master'
