@@ -2,14 +2,10 @@ import { getNodeAPIName, getPlatform } from '@prisma/get-platform'
 import { ClientEngineType, getClientEngineType } from '@prisma/sdk'
 import fs from 'fs'
 import path from 'path'
+import { testIf } from '../../../../../../../helpers/test/conditional'
 import { generateTestClient } from '../../../../utils/getTestClient'
 
-if (getClientEngineType() === ClientEngineType.DataProxy) {
-  // eslint-disable-next-line no-global-assign
-  test = test.skip
-}
-
-test('custom engine binary path (internal API)', async () => {
+testIf(getClientEngineType() !== ClientEngineType.DataProxy)('custom engine binary path (internal API)', async () => {
   await generateTestClient()
 
   const platform = await getPlatform()
