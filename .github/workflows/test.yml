@@ -588,6 +588,9 @@ jobs:
       - name: Setup PostgreSQL
         run: bash .github/workflows/setup-postgres.sh
 
+      - name: Setup MySQL
+        run: bash .github/workflows/setup-mysql.sh
+
       - name: Cache .pnpm-store
         uses: actions/cache@v1
         with:
