@@ -6,7 +6,7 @@ echo $RUNNER_OS
 
 if [ "$RUNNER_OS" = "Windows" ]; then
     export PGDATA="$RUNNER_TEMP\\pgdata"
-    export PATH="$PGBIN:$PATH"
+    export PATH="$PATH:/c/Program Files/PostgreSQL/14/bin"
     export PQ_LIB_DIR="$PGROOT\\lib"
     export PGUSER="$USERNAME"
 fi
