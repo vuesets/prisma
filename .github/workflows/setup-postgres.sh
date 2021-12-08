@@ -16,9 +16,6 @@ if [ "$RUNNER_OS" = "macOS" ]; then
     export PGUSER="$USER"
 fi
 
-echo $PATH
-echo $PGUSER
-
 pg_ctl init
 pg_ctl start
 createuser --createdb prisma
