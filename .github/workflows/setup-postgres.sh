@@ -1,6 +1,10 @@
 #!/bin/bash
 
+set -ex
+
 export PGDATA="$RUNNER_TEMP/pgdata"
+
+echo $RUNNER_OS
 
 if [ "$RUNNER_OS" = "Windows" ]; then
     export PATH="$PGBIN:$PATH"
@@ -11,6 +15,9 @@ fi
 if [ "$RUNNER_OS" = "macOS" ]; then
     export PGUSER="$USER"
 fi
+
+echo $PATH
+echo $PGUSER
 
 pg_ctl init
 pg_ctl start
