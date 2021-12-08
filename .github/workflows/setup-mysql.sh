@@ -3,7 +3,7 @@
 set -ex
 
 if [ "$RUNNER_OS" = "Windows" ]; then
-    # TODO
+    echo TODO
 fi
 
 if [ "$RUNNER_OS" = "macOS" ]; then
