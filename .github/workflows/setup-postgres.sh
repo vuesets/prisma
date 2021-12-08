@@ -2,17 +2,17 @@
 
 set -ex
 
-export PGDATA="$RUNNER_TEMP/pgdata"
-
 echo $RUNNER_OS
 
 if [ "$RUNNER_OS" = "Windows" ]; then
+    export PGDATA="$RUNNER_TEMP\\pgdata"
     export PATH="$PGBIN:$PATH"
-    export PQ_LIB_DIR='$PGROOT\\lib'
+    export PQ_LIB_DIR="$PGROOT\\lib"
     export PGUSER="$USERNAME"
 fi
 
 if [ "$RUNNER_OS" = "macOS" ]; then
+    export PGDATA="$RUNNER_TEMP/pgdata"
     export PGUSER="$USER"
 fi
 
