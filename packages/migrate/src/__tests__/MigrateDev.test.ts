@@ -6,7 +6,8 @@ import { consoleContext, Context } from './__helpers__/context'
 import { setupMysql, tearDownMysql } from '../utils/setupMysql'
 import { setupMSSQL, tearDownMSSQL } from '../utils/setupMSSQL'
 import { SetupParams, setupPostgres, tearDownPostgres } from '../utils/setupPostgres'
-import { describeIf } from '../../../../helpers/test/conditional'
+
+const describeIf = (condition: boolean) => (condition ? describe : describe.skip)
 
 const ctx = Context.new().add(consoleContext()).assemble()
 

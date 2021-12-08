@@ -7,7 +7,8 @@ import {
   dropDatabase,
 } from '../migrateEngineCommands'
 import { uriToCredentials, credentialsToUri } from '../convertCredentials'
-import { testIf } from '../../../../helpers/test/conditional'
+
+const testIf = (condition: boolean) => (condition ? test : test.skip)
 
 describe('execaCommand', () => {
   test('check if connection string is in error', async () => {
