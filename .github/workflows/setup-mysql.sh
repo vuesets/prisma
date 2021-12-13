@@ -3,7 +3,6 @@
 set -ex
 
 if [ "$RUNNER_OS" = "Windows" ]; then
-    echo $PATH
     pwsh .github/workflows/install-mysql.ps1
 fi
 
