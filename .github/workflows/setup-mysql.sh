@@ -8,7 +8,7 @@ fi
 
 if [ "$RUNNER_OS" = "macOS" ]; then
     brew install mysql
-    brew services start mysql
+    brew services run mysql
 fi
 
 echo 'TEST_MYSQL_URI="mysql://root:root@localhost:3306/tests"' >> $GITHUB_ENV
