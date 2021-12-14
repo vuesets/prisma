@@ -6,7 +6,10 @@ import { EXIT_MESSAGE, READY_MESSAGE } from './__helpers__/constants'
 
 function spawnChild() {
   const childPath = path.join(__dirname, '__helpers__', 'client.ts')
-  return execa('node', ['-r', 'esbuild-register', childPath])
+  return execa('node', ['-r', 'esbuild-register', childPath], {
+    // Don't reject the promise if the process exits on signal.
+    reject: false,
+  })
 }
 
 async function waitMessageOnStdout(child: ExecaChildProcess): Promise<string> {
