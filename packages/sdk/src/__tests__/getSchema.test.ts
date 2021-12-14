@@ -2,6 +2,13 @@ import path from 'path'
 import { getSchemaPathInternal, getSchemaPathSyncInternal } from '../cli/getSchema'
 import { fixturesPath } from './__utils__/fixtures'
 
+if (process.env.CI) {
+  // 5s is often not enough for the "finds the schema path in the root
+  // package.json of a yarn workspace from a child package" test on CI,
+  // especially on macOS.
+  jest.setTimeout(10000)
+}
+
 process.env.npm_config_user_agent = 'yarn/1.22.4 npm/? node/v12.18.3 darwin x64'
 
 const FIXTURE_CWD = path.resolve(fixturesPath, 'getSchema')
