@@ -203,26 +203,32 @@ describe('full-text-search (postgres)', () => {
    * Use an invalid operator
    */
   test('bad operator', async () => {
-    const result = prisma.user.findMany({
-      where: {
-        name: {
-          search: '0 1',
+    const result = prisma.user
+      .findMany({
+        where: {
+          name: {
+            search: '0 1',
+          },
         },
-      },
-    })
+      })
+      .catch((error) => {
+        // Remove `tsquery.c` line number to make error snapshots portable across PostgreSQL versions.
+        error.message = error.message.replace(/line: Some\(\d+\)/, 'line: Some(0)')
+        throw error
+      })
 
     await expect(result).rejects.toThrowErrorMatchingInlineSnapshot(`
 
-Invalid \`prisma.user.findMany()\` invocation in
-/client/src/__tests__/integration/happy/full-text-search/test.ts:0:0
+      Invalid \`.findMany()\` invocation in
+      /client/src/__tests__/integration/happy/full-text-search/test.ts:0:0
 
-  203  * Use an invalid operator
-  204  */
-  205 test('bad operator', async () => {
-→ 206   const result = prisma.user.findMany(
-  Error occurred during query execution:
-ConnectorError(ConnectorError { user_facing_error: None, kind: QueryError(Error { kind: Db, cause: Some(DbError { severity: "ERROR", parsed_severity: Some(Error), code: SqlState("42601"), message: "syntax error in tsquery: \\"0 1\\"", detail: None, hint: None, position: None, where_: None, schema: None, table: None, column: None, datatype: None, constraint: None, file: Some("tsquery.c"), line: Some(514), routine: Some("makepol") }) }) })
-`)
+        204  */
+        205 test('bad operator', async () => {
+        206   const result = prisma.user
+      → 207     .findMany(
+        Error occurred during query execution:
+      ConnectorError(ConnectorError { user_facing_error: None, kind: QueryError(Error { kind: Db, cause: Some(DbError { severity: "ERROR", parsed_severity: Some(Error), code: SqlState("42601"), message: "syntax error in tsquery: \\"0 1\\"", detail: None, hint: None, position: None, where_: None, schema: None, table: None, column: None, datatype: None, constraint: None, file: Some("tsquery.c"), line: Some(0), routine: Some("makepol") }) }) })
+    `)
   })
 
   test('order by relevance on a single field', async () => {
