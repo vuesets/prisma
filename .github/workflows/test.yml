@@ -47,31 +47,31 @@ env:
   PRISMA_TELEMETRY_INFORMATION: 'prisma test.yml'
 
 jobs:
-  # detect_jobs_to_run:
-  #   name: Detect jobs to run
-  #   runs-on: ubuntu-latest
-  #   outputs:
-  #     jobs: ${{ steps.detect.outputs.jobs }}
-  #   steps:
-  #     - id: checkout
-  #       uses: actions/checkout@v2
-  #     - id: files
-  #       uses: Ana06/get-changed-files@v1.2 # it's a fork of jitterbit/get-changed-files@v1 which works better with pull requests
-  #       with:
-  #         format: 'json'
-  #     - id: detect
-  #       run: ./.github/workflows/detect-jobs-to-run.js <<<'${{ steps.files.outputs.all }}'
+  detect_jobs_to_run:
+    name: Detect jobs to run
+    runs-on: ubuntu-latest
+    outputs:
+      jobs: ${{ steps.detect.outputs.jobs }}
+    steps:
+      - id: checkout
+        uses: actions/checkout@v2
+      - id: files
+        uses: Ana06/get-changed-files@v1.2 # it's a fork of jitterbit/get-changed-files@v1 which works better with pull requests
+        with:
+          format: 'json'
+      - id: detect
+        run: ./.github/workflows/detect-jobs-to-run.js <<<'${{ steps.files.outputs.all }}'
 
-  # # From https://github.com/marketplace/actions/skip-duplicate-actions
-  # # This action cleans up previously running instances of a workflow on the same branch.
-  # # This accomplishes the task of automatically cancelling CI runs on pushes to the same branch,
-  # # which is a common feature in most CI systems but currently not possible with GitHub actions.
-  # cleanup-runs:
-  #   continue-on-error: true
-  #   runs-on: ubuntu-latest
-  #   if: "!startsWith(github.ref, 'refs/tags/') && github.ref != 'refs/heads/main' && !contains(github.actor, 'renovate')"
-  #   steps:
-  #     - uses: fkirc/skip-duplicate-actions@v3.4.1
+  # From https://github.com/marketplace/actions/skip-duplicate-actions
+  # This action cleans up previously running instances of a workflow on the same branch.
+  # This accomplishes the task of automatically cancelling CI runs on pushes to the same branch,
+  # which is a common feature in most CI systems but currently not possible with GitHub actions.
+  cleanup-runs:
+    continue-on-error: true
+    runs-on: ubuntu-latest
+    if: "!startsWith(github.ref, 'refs/tags/') && github.ref != 'refs/heads/main' && !contains(github.actor, 'renovate')"
+    steps:
+      - uses: fkirc/skip-duplicate-actions@v3.4.1
 
   # #
   # # Linting
@@ -567,6 +567,7 @@ jobs:
   no-docker:
     timeout-minutes: 30
     runs-on: ${{ matrix.os }}
+    needs: detect_jobs_to_run
 
     strategy:
       fail-fast: false
@@ -575,6 +576,7 @@ jobs:
         # https://github.com/actions/virtual-environments/issues/4060
         os: [macos-11, windows-latest]
         node: [16]
+        queryEngine: ['library', 'binary']
 
     steps:
       - uses: actions/checkout@v2
@@ -582,8 +584,10 @@ jobs:
       - name: Prerequisites
         shell: bash
         run: |
-          echo 'TEST_SKIP_MSSQL=true' >> $GITHUB_ENV
-          echo 'TEST_MONGO_URI=mongodb://localhost:27017/tests' >> $GITHUB_ENV
+          echo "TEST_SKIP_MSSQL=true" >> $GITHUB_ENV
+          echo "TEST_MONGO_URI=mongodb://localhost:27017/tests" >> $GITHUB_ENV
+          echo "PRISMA_CLI_QUERY_ENGINE_TYPE=${{ matrix.queryEngine }}" >> $GITHUB_ENV
+          echo "PRISMA_CLIENT_ENGINE_TYPE=${{ matrix.queryEngine }}" >> $GITHUB_ENV
 
       - name: Setup PostgreSQL
         run: bash .github/workflows/setup-postgres.sh
@@ -607,9 +611,21 @@ jobs:
           SKIP_GIT: true
           GITHUB_CONTEXT: ${{ toJson(github) }}
 
-      - run: pnpm run test
+      - name: sdk
+        if: ${{ contains(needs.detect_jobs_to_run.outputs.jobs, '-all-') }}
+        run: pnpm run test
         working-directory: packages/sdk
         env:
           CI: true
           SKIP_GIT: true
           GITHUB_CONTEXT: ${{ toJson(github) }}
+
+      - name: client
+        if: ${{ contains(needs.detect_jobs_to_run.outputs.jobs, '-all-') || contains(needs.detect_jobs_to_run.outputs.jobs, '-client-') }}
+        run: pnpm run test-notypes
+        working-directory: packages/client
+        env:
+          CI: true
+          SKIP_GIT: true
+          GITHUB_CONTEXT: ${{ toJson(github) }}
+          NODE_OPTIONS: '--max-old-space-size=8096'
