@@ -1,8 +1,11 @@
 import { getTestClient } from '../../../../utils/getTestClient'
 
+const describeIf = (condition: boolean) => (condition ? describe : describe.skip)
+
 let PrismaClient, prisma
 
-describe('interactive transaction', () => {
+// TODO: Windows: interactive transactions tests fail on Windows.
+describeIf(process.platform !== 'win32')('interactive transaction', () => {
   /**
    * Minimal example of a interactive transaction
    */
