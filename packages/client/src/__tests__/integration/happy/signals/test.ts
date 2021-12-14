@@ -4,6 +4,10 @@ import execa from 'execa'
 import path from 'path'
 import { EXIT_MESSAGE, READY_MESSAGE } from './__helpers__/constants'
 
+const testIf = (condition: boolean) => (condition ? test : test.skip)
+
+const userSignalsSupported = process.platform !== 'win32'
+
 function spawnChild() {
   const childPath = path.join(__dirname, '__helpers__', 'client.ts')
   return execa('node', ['-r', 'esbuild-register', childPath], {
@@ -32,7 +36,7 @@ describe('signals that should terminate the process', () => {
     expect((await child).stdout).toBe('')
   })
 
-  test('SIGUSR2', async () => {
+  testIf(userSignalsSupported)('SIGUSR2', async () => {
     const child = spawnChild()
     expect(await waitMessageOnStdout(child)).toBe(READY_MESSAGE)
     child.kill('SIGUSR2')
@@ -41,7 +45,7 @@ describe('signals that should terminate the process', () => {
 })
 
 describe('Node.js debugger signal', () => {
-  test('SIGUSR1', async () => {
+  testIf(userSignalsSupported)('SIGUSR1', async () => {
     const child = spawnChild()
     expect(await waitMessageOnStdout(child)).toBe(READY_MESSAGE)
     child.kill('SIGUSR1')
