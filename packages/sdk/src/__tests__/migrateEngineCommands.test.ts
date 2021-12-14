@@ -8,6 +8,11 @@ import {
 } from '../migrateEngineCommands'
 import { uriToCredentials, credentialsToUri } from '../convertCredentials'
 
+if (process.env.CI) {
+  // 5s is often not enough for the "postgresql - create database" test on CI, especially on macOS.
+  jest.setTimeout(10000)
+}
+
 const testIf = (condition: boolean) => (condition ? test : test.skip)
 
 describe('execaCommand', () => {
