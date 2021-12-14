@@ -30,7 +30,10 @@ function normalizeTsClientStackTrace(str) {
 // macOS will update extension to .dylib.node, but CI uses .so.node for example
 // Note that on Windows the file name doesn't start with "lib".
 function normalizeNodeApiLibFilePath(str) {
-  return str.replace(/((lib)?query_engine-TEST_PLATFORM.)(.*)(.node)/, '$1LIBRARY_TYPE$4')
+  return str.replace(
+    /((lib)?query_engine-TEST_PLATFORM.)(.*)(.node)/,
+    'libquery_engine-TEST_PLATFORM.LIBRARY_TYPE.node',
+  )
 }
 
 const serializer = {
