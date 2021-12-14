@@ -3,6 +3,8 @@ import { generateTestClient } from '../../../../utils/getTestClient'
 import { tearDownPostgres } from '../../../../utils/setupPostgres'
 import { migrateDb } from '../../__helpers__/migrateDb'
 
+const testIf = (condition: boolean) => (condition ? test : test.skip)
+
 // @ts-ignore trick to get typings at dev time
 import type { PrismaClient } from './node_modules/@prisma/client'
 
@@ -201,8 +203,10 @@ describe('full-text-search (postgres)', () => {
 
   /**
    * Use an invalid operator
+   *
+   * TODO: Windows: temporarily skipped because of jestSnapshotSerializer bug.
    */
-  test('bad operator', async () => {
+  testIf(process.platform !== 'win32')('bad operator', async () => {
     const result = prisma.user
       .findMany({
         where: {
