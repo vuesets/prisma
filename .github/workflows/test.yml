@@ -629,7 +629,7 @@ jobs:
           SKIP_GIT: true
           GITHUB_CONTEXT: ${{ toJson(github) }}
 
-      - name: sdk
+      - name: Test packages/sdk
         if: ${{ contains(needs.detect_jobs_to_run.outputs.jobs, '-all-') }}
         run: pnpm run test
         working-directory: packages/sdk
@@ -645,7 +645,7 @@ jobs:
           flags: sdk,${{ matrix.os }},${{ matrix.queryEngine }}
           name: sdk-${{ matrix.os }}-${{ matrix.queryEngine }}
 
-      - name: client
+      - name: Test packages/client
         if: ${{ contains(needs.detect_jobs_to_run.outputs.jobs, '-all-') || contains(needs.detect_jobs_to_run.outputs.jobs, '-client-') }}
         run: pnpm run test-notypes
         working-directory: packages/client
@@ -662,7 +662,7 @@ jobs:
           flags: client,${{ matrix.os }},${{ matrix.queryEngine }}
           name: client-${{ matrix.os }}-${{ matrix.queryEngine }}
 
-      - name: migrate
+      - name: Test packages/migrate
         if: ${{ contains(needs.detect_jobs_to_run.outputs.jobs, '-all-') || contains(needs.detect_jobs_to_run.outputs.jobs, '-migrate-') }}
         run: pnpm run test
         working-directory: packages/migrate
@@ -678,7 +678,7 @@ jobs:
           flags: migrate,${{ matrix.os }},${{ matrix.queryEngine }}
           name: migrate-${{ matrix.os }}-${{ matrix.queryEngine }}
 
-      - name: cli
+      - name: Test packages/cli
         if: ${{ contains(needs.detect_jobs_to_run.outputs.jobs, '-all-') || contains(needs.detect_jobs_to_run.outputs.jobs, '-cli-') }}
         run: pnpm run test
         working-directory: packages/cli
@@ -694,7 +694,7 @@ jobs:
           flags: cli,${{ matrix.os }},${{ matrix.queryEngine }}
           name: cli-${{ matrix.os }}-${{ matrix.queryEngine }}
 
-      - name: debug
+      - name: Test packages/debug
         if: ${{ contains(needs.detect_jobs_to_run.outputs.jobs, '-all-') }}
         run: pnpm run test
         working-directory: packages/debug
@@ -710,7 +710,7 @@ jobs:
           flags: debug,${{ matrix.os }},library,binary
           name: debug-${{ matrix.os }}
 
-      - name: engine-core
+      - name: Test packages/engine-core
         if: ${{ contains(needs.detect_jobs_to_run.outputs.jobs, '-all-') }}
         run: pnpm run test
         working-directory: packages/engine-core
@@ -726,7 +726,7 @@ jobs:
           flags: engine-core,${{ matrix.os }},library,binary
           name: engine-core-${{ matrix.os }}
 
-      - name: generator-helper
+      - name: Test packages/generator-helper
         if: ${{ contains(needs.detect_jobs_to_run.outputs.jobs, '-all-') }}
         run: pnpm run test
         working-directory: packages/generator-helper
