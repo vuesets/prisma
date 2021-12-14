@@ -10,6 +10,11 @@ import { resolveBinary } from '../../resolveBinary'
 
 jest.setTimeout(20000)
 
+if (process.env.CI) {
+  // 20s is often not enough on CI, especially on macOS.
+  jest.setTimeout(60000)
+}
+
 let generatorPath = path.join(__dirname, 'generator')
 
 if (process.platform === 'win32') {
