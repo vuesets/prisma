@@ -73,34 +73,34 @@ jobs:
     steps:
       - uses: fkirc/skip-duplicate-actions@v3.4.1
 
-  # #
-  # # Linting
-  # #
-  # lint:
-  #   timeout-minutes: 7
-  #   runs-on: ubuntu-latest
+  #
+  # Linting
+  #
+  lint:
+    timeout-minutes: 7
+    runs-on: ubuntu-latest
 
-  #   steps:
-  #     - uses: actions/checkout@v2
+    steps:
+      - uses: actions/checkout@v2
 
-  #     - name: Cache .pnpm-store # From https://pnpm.io/continuous-integration
-  #       uses: actions/cache@v1
-  #       with:
-  #         path: ~/.pnpm-store
-  #         key: ${{ runner.os }}-node-${{ hashFiles('**/pnpm-lock.yaml') }}
+      - name: Cache .pnpm-store # From https://pnpm.io/continuous-integration
+        uses: actions/cache@v1
+        with:
+          path: ~/.pnpm-store
+          key: ${{ runner.os }}-node-${{ hashFiles('**/pnpm-lock.yaml') }}
 
-  #     - uses: actions/setup-node@v2
-  #       with:
-  #         node-version: '12'
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '12'
 
-  #     - run: bash .github/workflows/setup.sh
-  #       env:
-  #         CI: true
-  #         SKIP_GIT: true
-  #         GITHUB_CONTEXT: ${{ toJson(github) }}
+      - run: bash .github/workflows/setup.sh
+        env:
+          CI: true
+          SKIP_GIT: true
+          GITHUB_CONTEXT: ${{ toJson(github) }}
 
-  #     - run: pnpm run lint
-  #       working-directory: ./
+      - run: pnpm run lint
+        working-directory: ./
 
   # #
   # # CLIENT (without types test)
