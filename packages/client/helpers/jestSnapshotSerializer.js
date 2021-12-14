@@ -23,7 +23,7 @@ function normalizeGithubLinks(str) {
 }
 
 function normalizeTsClientStackTrace(str) {
-  return str.replace(/(\/client\/src\/__tests__\/.*test.ts)(:\d*:\d*)/, '$1:0:0')
+  return str.replace(/([/\\]client[/\\]src[/\\]__tests__[/\\].*test.ts)(:\d*:\d*)/, '$1:0:0')
 }
 
 // When updating snapshots this is sensitive to OS
