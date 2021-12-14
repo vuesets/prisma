@@ -612,7 +612,7 @@ jobs:
           GITHUB_CONTEXT: ${{ toJson(github) }}
 
       - name: sdk
-        if: ${{ contains(needs.detect_jobs_to_run.outputs.jobs, '-all-') }}
+        if: ${{ contains(needs.detect_jobs_to_run.outputs.jobs, '-all-') || contains(needs.detect_jobs_to_run.outputs.jobs, '-sdk-') }}
         run: pnpm run test
         working-directory: packages/sdk
         env:
@@ -629,3 +629,21 @@ jobs:
           SKIP_GIT: true
           GITHUB_CONTEXT: ${{ toJson(github) }}
           NODE_OPTIONS: '--max-old-space-size=8096'
+
+      - name: migrate
+        if: ${{ contains(needs.detect_jobs_to_run.outputs.jobs, '-all-') || contains(needs.detect_jobs_to_run.outputs.jobs, '-migrate-') }}
+        run: pnpm run test
+        working-directory: packages/migrate
+        env:
+          CI: true
+          SKIP_GIT: true
+          GITHUB_CONTEXT: ${{ toJson(github) }}
+
+      - name: cli
+        if: ${{ contains(needs.detect_jobs_to_run.outputs.jobs, '-all-') || contains(needs.detect_jobs_to_run.outputs.jobs, '-cli-') }}
+        run: pnpm run test
+        working-directory: packages/cli
+        env:
+          CI: true
+          SKIP_GIT: true
+          GITHUB_CONTEXT: ${{ toJson(github) }}
