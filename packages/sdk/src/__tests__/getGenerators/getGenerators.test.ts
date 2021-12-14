@@ -10,7 +10,11 @@ import { resolveBinary } from '../../resolveBinary'
 
 jest.setTimeout(20000)
 
-const generatorPath = path.join(__dirname, 'generator')
+let generatorPath = path.join(__dirname, 'generator')
+
+if (process.platform === 'win32') {
+  generatorPath += '.cmd'
+}
 
 describe('getGenerators', () => {
   test('basic', async () => {
