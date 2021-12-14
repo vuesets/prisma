@@ -53,7 +53,7 @@ test('ignore comments', () => {
 
   // TODO: Windows: fixup to work around a bug in jestSnapshotSerializer
   if (process.platform === 'win32') {
-    serializedResult = serializedResult.replace(/\/\//g, '/')
+    serializedResult = serializedResult.replace(/\\\\/g, '/')
   }
 
   expect(serializedResult).toMatchInlineSnapshot(`
@@ -118,7 +118,7 @@ test('basic happy path', () => {
 
   // TODO: Windows: fixup to work around a bug in jestSnapshotSerializer
   if (process.platform === 'win32') {
-    serializedResult = serializedResult.replace(/\/\//g, '/')
+    serializedResult = serializedResult.replace(/\\\\/g, '/')
   }
 
   expect(serializedResult).toMatchInlineSnapshot(`
