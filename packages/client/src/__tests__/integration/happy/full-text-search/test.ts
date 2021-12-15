@@ -226,10 +226,10 @@ describe('full-text-search (postgres)', () => {
       Invalid \`.findMany()\` invocation in
       /client/src/__tests__/integration/happy/full-text-search/test.ts:0:0
 
-        204  */
-        205 test('bad operator', async () => {
-        206   const result = prisma.user
-      → 207     .findMany(
+        208  */
+        209 testIf(process.platform !== 'win32')('bad operator', async () => {
+        210   const result = prisma.user
+      → 211     .findMany(
         Error occurred during query execution:
       ConnectorError(ConnectorError { user_facing_error: None, kind: QueryError(Error { kind: Db, cause: Some(DbError { severity: "ERROR", parsed_severity: Some(Error), code: SqlState("42601"), message: "syntax error in tsquery: \\"0 1\\"", detail: None, hint: None, position: None, where_: None, schema: None, table: None, column: None, datatype: None, constraint: None, file: Some("tsquery.c"), line: Some(0), routine: Some("makepol") }) }) })
     `)
