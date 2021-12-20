@@ -582,6 +582,7 @@ jobs:
     if: |
       ${{
         contains(needs.detect_jobs_to_run.outputs.jobs, '-all-') ||
+        contains(needs.detect_jobs_to_run.outputs.jobs, '-sdk-') ||
         contains(needs.detect_jobs_to_run.outputs.jobs, '-client-') ||
         contains(needs.detect_jobs_to_run.outputs.jobs, '-migrate-') ||
         contains(needs.detect_jobs_to_run.outputs.jobs, '-cli-')
