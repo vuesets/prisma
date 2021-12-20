@@ -566,8 +566,7 @@ jobs:
   # Run all tests on macOS and Windows.
   #
   # Unlike the other jobs, this job doesn't use Docker (and thus skips some
-  # tests that require dependencies not easily installable without Docker —
-  # specifically, SQL Server).
+  # tests that require dependencies not easily installable without Docker).
   #
   # It also runs the tests for different packages sequentially to prevent the
   # combinatorial explosion of the number of parallel jobs, to minimize the
