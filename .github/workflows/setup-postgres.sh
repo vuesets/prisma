@@ -2,8 +2,6 @@
 
 set -ex
 
-echo $RUNNER_OS
-
 if [ "$RUNNER_OS" = "Windows" ]; then
     export PGDATA="$RUNNER_TEMP\\pgdata"
     export PGUSER="$USERNAME"
